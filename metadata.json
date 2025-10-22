@@ -1,0 +1,5 @@
+{
+  "name": "Prompt-Library",
+  "description": "A prompt library for learning the Heat Transfer course using a Socratic inquiry method with an AI tutor. Select a topic to get a tailored prompt for your AI learning session.",
+  "requestFramePermissions": []
+}
