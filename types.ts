@@ -4,4 +4,5 @@ export interface Prompt {
   title: string;
   description: string;
   prompt: string;
+  category: string;
 }

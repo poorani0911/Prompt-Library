@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { PROMPTS } from './constants/prompts';
 import { Prompt } from './types';
 import TopicCard from './components/TopicCard';
@@ -7,6 +7,19 @@ import PromptDisplay from './components/PromptDisplay';
 
 const App: React.FC = () => {
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>('All');
+
+  const categories = useMemo(
+    () => ['All', ...Array.from(new Set(PROMPTS.map((p) => p.category)))],
+    []
+  );
+
+  const filteredPrompts = useMemo(() => {
+    if (activeCategory === 'All') {
+      return PROMPTS;
+    }
+    return PROMPTS.filter((prompt) => prompt.category === activeCategory);
+  }, [activeCategory]);
 
   const handleSelectPrompt = (prompt: Prompt) => {
     setSelectedPrompt(prompt);
@@ -28,8 +41,24 @@ const App: React.FC = () => {
           </p>
         </header>
 
+        <div className="flex justify-center items-center flex-wrap gap-3 mb-12">
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                activeCategory === category
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-white text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PROMPTS.map((prompt) => (
+          {filteredPrompts.map((prompt) => (
             <TopicCard
               key={prompt.id}
               prompt={prompt}
